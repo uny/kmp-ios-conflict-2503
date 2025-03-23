@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "KotlinProject"
 include(":androidApp")
 include(":shared")
+include(":sharedPlugin")

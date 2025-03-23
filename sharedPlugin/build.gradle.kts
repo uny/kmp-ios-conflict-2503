@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinCocoapods)
 }
 
 kotlin {
@@ -23,21 +23,16 @@ kotlin {
     iosSimulatorArm64()
 
     cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
         version = "1.0"
         ios.deploymentTarget = "16.0"
-        podfile = project.file("../iosApp/Podfile")
-        framework {
-            baseName = "shared"
-            isStatic = true
+        noPodspec()
+        pod("GoogleMaps") {
+            extraOpts += listOf("-compiler-option", "-fmodules")
         }
     }
-    
+
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.sharedPlugin)
-            implementation(compose.components.resources)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.runtime)
@@ -47,7 +42,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.framework"
+    namespace = "com.example.plugin"
     compileSdk = 35
     defaultConfig {
         minSdk = 24
