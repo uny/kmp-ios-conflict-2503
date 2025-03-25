@@ -1,5 +1,23 @@
+use_frameworks!
+platform :ios, '16.0'
+
 target 'iosApp' do
-  use_frameworks!
-  platform :ios, '16.0'
   pod 'shared', :path => '../shared'
+end
+
+target 'iosView' do
+  pod 'shared', :path => '../shared'
+end
+
+post_install do |installer|
+  host_targets = installer.aggregate_targets.select { |target|
+    target.name.include? "Pods-"
+  }
+  host_targets.each do |target|
+    target.xcconfigs.each do |config_name, config_file|
+      config_file.frameworks.delete("GoogleMaps")
+      xcconfig_path = target.xcconfig_path(config_name)
+      config_file.save_as(xcconfig_path)
+    end
+  end
 end
